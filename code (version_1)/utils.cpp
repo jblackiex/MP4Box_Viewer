@@ -34,28 +34,25 @@ void	print_mdat(QFile &file)
 			cout << line.toStdString();
 		}
 	}
-	cout << endl << "#-----------------------------------------------------------------------#" << endl <<  "END OF FILE. Scroll up to see the size and type of found Indented Boxes." << endl;
 	if (count > 0)
 		cout << endl << "\033[1;32m" << "Found " << count << " images in mdat box." << " Saved as image_00X.png" << "\033[0m" << endl;
 	else
 		cout << endl << "\033[1;31m" << "No images found in mdat box." << "\033[0m" << endl;
-	cout << "#-----------------------------------------------------------------------#" << endl;
+	cout << endl << "#-------------------------------------------------------------#" << endl << "END OF FILE. Scroll up to see the size and type of found boxes." << endl;
+	cout << "#-------------------------------------------------------------#" << endl;
 }
 
-// NEW CODE HERE! //
 bool	print_box(QByteArray &prev_box, QByteArray &box, quint32 &size, int &mdat)
 {
-	static int tab = 2;
-	string type = box.right(4).toStdString();
-	string restore;
-
-	tab *= type == "moof" || type == "traf" ? 2 : type == "mdat" ? 0 : 1;
-	restore = type == "mdat" ? "\r" : ""; // this to print mdat Box ID correctly
-	string box_id = restore + "Box ID: "; // \rBox ID: mdat if type == "mdat"
+	// print timestamp, size and type of box
+	auto now = chrono::system_clock::now();
+	auto ms = chrono::duration_cast<chrono::milliseconds>(now.time_since_epoch()).count();
+	auto now_current = chrono::system_clock::to_time_t(now);
+	cout << put_time(localtime(&now_current), "%Y-%m-%d %T.") << setw(3) << setfill('0') << ms % 1000;
 	if (!mdat)
-		cout << box_id << type << " of size " << size << endl << setw(tab) << " ";
+		cout << " " << "Found box of type " << box.right(4).toStdString() << " and size " << size << endl;
 	else
-		cout << "\rMdat content:\n" << prev_box.right(3).toStdString();
+		cout << " " << "Content of mdat box is: " << prev_box.right(3).toStdString();	
 	return mdat;
 }
 

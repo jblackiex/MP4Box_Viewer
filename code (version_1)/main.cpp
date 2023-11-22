@@ -43,6 +43,18 @@ int main(int ac, char **av)
 	return 1;
     }
 	read_file(file);
-	file.close();
-	QCoreApplication::exit(0);
+	
+	QTextStream input(stdin);
+    QString userInput;
+
+    // ask user if he wants to quit
+    while (1) {
+		qDebug() << "Would you like to quit? (yes/no)";
+		input >> userInput;
+    	if (userInput.toLower() == "yes" || userInput.toLower() == "y") {
+        qDebug() << "Quitting... bye!";
+		file.close();
+		QCoreApplication::exit(0);
+    	}
+	}
 }
