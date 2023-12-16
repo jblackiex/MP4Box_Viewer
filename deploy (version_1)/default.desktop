@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=mp4box
-Exec=AppRun %F
-Icon=default
-Comment=mp4 box viewer
-Terminal=true
-Categories=Utility;
